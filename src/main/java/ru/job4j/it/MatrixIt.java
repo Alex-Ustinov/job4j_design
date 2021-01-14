@@ -19,7 +19,6 @@ public class MatrixIt implements Iterator<Integer> {
             for (int i = column; i < data.length; i++) {
                 if (data[i].length - 1 >= row) {
                     for (int y = row; y < data[i][y]; y++) {
-                        System.out.println("Y " + y);
                         if (Integer.valueOf(data[i][y]) != null) {
                             column = i;
                             row = y;

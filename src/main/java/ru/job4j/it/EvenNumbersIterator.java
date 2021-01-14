@@ -14,26 +14,17 @@ public class EvenNumbersIterator implements Iterator {
 
     @Override
     public boolean hasNext() {
-        if (index > 0) {
-            index++;
-        }
-        if (data.length < index || data.length == 0) {
-            return false;
-        } else if (checkFurther() == -1) {
-            return false;
-        }
-        return true;
-    }
-
-    private int checkFurther() {
-        for (int i = index; i < data.length; i++) {
-            if (data[i] % 2 == 0) {
-                System.out.println("i " + i);
-                index = i;
-                return i;
+        if (data.length - 1 >= index || data.length == 0) {
+            for (int i = index; i < data.length; i++) {
+                if (data[i] % 2 == 0) {
+                    index = i;
+                    return true;
+                }
             }
+        } else {
+            return false;
         }
-        return -1;
+        return false;
     }
 
     @Override
@@ -41,7 +32,6 @@ public class EvenNumbersIterator implements Iterator {
         if (!hasNext()) {
             throw new NoSuchElementException();
         }
-        System.out.println("index " + index);
-        return data[index];
+        return data[index++];
     }
 }
