@@ -13,29 +13,18 @@ public class FlatMap<T> implements Iterator<T> {
 
     @Override
     public boolean hasNext() {
-        Iterator<T> it = data.next();
-        if (cursor.hasNext()) {
-            System.out.println("cursor " + cursor.hasNext());
-            return true;
-        }
-        System.out.println("cursor " + cursor.hasNext());
-        System.out.println("it " + it.hasNext());
-        while (!cursor.hasNext() && it.hasNext()) {
-            //System.out.println(it);
-            cursor = it;
+        while (!cursor.hasNext() && data.hasNext()) {
+            cursor = data.next();
         }
         return cursor.hasNext();
     }
 
     @Override
     public T next() {
-        System.out.println("start");
         if (!hasNext()) {
             throw new NoSuchElementException();
         }
-        T t = cursor.next();
-        System.out.println(t);
-        return t;
+        return cursor.next();
     }
 
     public static void main(String[] args) {
