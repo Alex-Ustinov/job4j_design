@@ -1,6 +1,7 @@
 package ru.job4j.generics;
 
 
+import javax.sql.rowset.Predicate;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
