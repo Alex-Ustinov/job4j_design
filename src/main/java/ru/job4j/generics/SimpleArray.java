@@ -23,6 +23,7 @@ public class SimpleArray<T> implements Iterable<T> {
                T shiftElement = array[i + 1];
                array[i] = shiftElement;
             }
+            array[array.length - 1] = null;
         }
     }
 
