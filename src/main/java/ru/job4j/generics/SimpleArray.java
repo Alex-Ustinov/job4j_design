@@ -1,5 +1,6 @@
 package ru.job4j.generics;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Objects;
@@ -27,15 +28,10 @@ public class SimpleArray<T> implements Iterable<T> {
     }
 
     public void remove(int index) {
-       //T[] newArray = new T[array.length - 1];
-       //array = System.arraycopy(array, index, newArray, 0, array.length - 1);
-        if (index <= array.length - 1) {
-            for (int i = index; i < array.length; i++) {
-               T shiftElement = array[i + 1];
-               array[i] = shiftElement;
-            }
-            array[array.length - 1] = null;
-        }
+        Class<?> arrayCompType = array.getClass().getComponentType();
+        T result = (T) Array.newInstance(arrayCompType, array.length - 2);
+        System.arraycopy(array, 0, result, 0, index);
+        System.arraycopy(array, index + 1, result, index, array.length - 2);
     }
 
     public T get(int index) {
