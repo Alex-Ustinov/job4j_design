@@ -2,17 +2,28 @@ package ru.job4j.generics;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.Objects;
 
 public class SimpleArray<T> implements Iterable<T> {
-
+    private int ids = 0;
     private T[] array;
 
+    public void setIds(int ids) {
+        this.ids = ids;
+    }
+
     public void add(T model) {
-        array[array.length] = model;
+        array[ids] = model;
+        setIds(ids++);
     }
 
     public void set(int index, T model) {
-        array[index] = model;
+        try {
+            Objects.checkIndex(index, ids);
+            array[index] = model;
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     public void remove(int index) {
@@ -28,8 +39,10 @@ public class SimpleArray<T> implements Iterable<T> {
     }
 
     public T get(int index) {
-        if (index > array.length) {
-            return null;
+        try {
+            Objects.checkIndex(index, ids);
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println(e.getMessage());
         }
         return array[index];
     }
