@@ -44,8 +44,9 @@ public final class MemStore<T extends Base> implements Store<T> {
 
     @Override
     public T findById(String id) {
-        if (searchById(id).isPresent()) {
-            return mem.get(searchById(id).get());
+        Optional<Integer> index = searchById(id);
+        if (index.isPresent()) {
+            return mem.get(index.get());
         }
         return null;
     }
