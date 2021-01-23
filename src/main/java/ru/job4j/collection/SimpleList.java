@@ -9,6 +9,8 @@ public class SimpleList<E> implements Iterable<E> {
     private int modCount = 0;
     private Iterator<E> cursor = Collections.emptyIterator();
     private int flag = 0;
+    transient Node<E> first;
+    transient Node<E> last;
 
     SimpleList() {
         container = new <Node<E>>[10];
@@ -26,10 +28,14 @@ public class SimpleList<E> implements Iterable<E> {
 
     public void add(E value) {
         modCount++;
+        Node<E> newNode = new Node<>(value, last, null);
+        last = newNode;
+        if (size == 0) {
+            first = new Node<>(value, newNode, null);
+        }
         if (size == container.length) {
             grows();
         }
-        Node<E> newNode = new Node<>(value, container[size], null);
         container[size++] = newNode;
     }
 
