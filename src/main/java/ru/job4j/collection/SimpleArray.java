@@ -6,8 +6,6 @@ public class SimpleArray<T> implements Iterable<T> {
     private Object[] container;
     private int size = 0;
     private int modCount = 0;
-    private Iterator<T> cursor = Collections.emptyIterator();
-    private int flag = 0;
 
     SimpleArray() {
         container = new Object[10];
@@ -18,8 +16,8 @@ public class SimpleArray<T> implements Iterable<T> {
     }
 
     public Object[] grow() {
-        Object[] newContainer = new Object[size + 10];
-        System.arraycopy(container, 0, newContainer, 0, size + 10);
+        Object[] newContainer = new Object[size * 2];
+        System.arraycopy(container, 0, newContainer, 0, size * 2);
         return newContainer;
     }
 
@@ -43,13 +41,11 @@ public class SimpleArray<T> implements Iterable<T> {
 
     class InnerIterator implements Iterator<T> {
         private int define = modCount;
+        private int flag = 0;
 
         @Override
         public boolean hasNext() {
-            if (flag < size) {
-                return true;
-            }
-            return false;
+            return flag < size;
         }
 
         @Override
