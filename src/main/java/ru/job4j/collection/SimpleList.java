@@ -3,7 +3,8 @@ package ru.job4j.collection;
 import java.lang.reflect.Array;
 import java.util.*;
 
-public class SimpleList<E> implements Iterable<E> {
+//public class SimpleList<E> implements Iterable<E> {
+    /*
     private Node<E>[] container;
     private int size = 0;
     private int modCount = 0;
@@ -17,13 +18,17 @@ public class SimpleList<E> implements Iterable<E> {
     }
 
     SimpleList(int size) {
-        container = new <Node<E>>[size];
+        container = new <Node<E>> [size];
     }
 
     public Node<E>[] grows () {
         Node<E>[] newList = new <Node<E>>[size * 2];
         System.arraycopy(container, 0 , newList, 0, size * 2);
         return newList;
+    }
+
+    public E delete() {
+
     }
 
     public void add(E value) {
@@ -71,4 +76,6 @@ public class SimpleList<E> implements Iterable<E> {
             return container[flag++].getItem();
         }
     }
-}
+
+     */
+//}
