@@ -8,10 +8,9 @@ public class Node<E> {
     public E getItem() {
         return item;
     }
-
-    Node(E item, Node<E> nextNode, Node<E> previousNode) {
+    Node(E item, Node<E> previousNode, Node<E> nextNode,) {
         this.item = item;
-        this.nextNode = nextNode;
         this.previousNode = previousNode;
+        this.nextNode = nextNode;
     }
 }

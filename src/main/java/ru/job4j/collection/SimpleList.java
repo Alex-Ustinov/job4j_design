@@ -19,16 +19,18 @@ public class SimpleList<E> implements Iterable<E> {
     }
 
     public Node<E>[] grows () {
-        Node<E>[] newList = new <Node<E>>[size + 10];
-        System.arraycopy(container, 0 , newList, 0, size + 10);
+        Node<E>[] newList = new <Node<E>>[size * 2];
+        System.arraycopy(container, 0 , newList, 0, size * 2);
         return newList;
     }
 
     public void add(E value) {
-        if () {
-
+        modCount++;
+        if (size == container.length) {
+            grows();
         }
-
+        Node<E> newNode = new Node<>(value, container[size], null);
+        container[size++] = newNode;
     }
 
     public E get(int index) throws IndexOutOfBoundsException {
@@ -38,18 +40,27 @@ public class SimpleList<E> implements Iterable<E> {
 
     @Override
     public Iterator<E> iterator() {
-        new CustomIterator();
+        return new CustomIterator();
     }
 
     class CustomIterator implements Iterator<E> {
+        private int define = modCount;
+        private int flag = 0;
+
         @Override
         public boolean hasNext() {
-            return false;
+            return flag < size;
         }
 
         @Override
         public E next() {
-            return null;
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
+            if (define != modCount) {
+                throw new ConcurrentModificationException();
+            }
+            return container[flag++].getItem();
         }
     }
 }
