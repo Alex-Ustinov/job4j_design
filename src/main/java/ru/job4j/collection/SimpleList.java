@@ -29,10 +29,12 @@ public class SimpleList<E> implements Iterable<E> {
     public void add(E value) {
         modCount++;
         Node<E> newNode = new Node<>(value, last, null);
-        last = newNode;
-        if (size == 0) {
+        if (last == null) {
             first = new Node<>(value, newNode, null);
+        } else {
+            last.setNextNode(newNode);
         }
+        last = newNode;
         if (size == container.length) {
             grows();
         }
