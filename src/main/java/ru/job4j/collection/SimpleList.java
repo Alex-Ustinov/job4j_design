@@ -1,68 +1,52 @@
 package ru.job4j.collection;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
-//public class SimpleList<E> implements Iterable<E> {
-    /*
-    private Node<E>[] container;
-    private int size = 0;
+public class SimpleList<E> implements Iterable<E> {
     private int modCount = 0;
-    private Iterator<E> cursor = Collections.emptyIterator();
-    private int flag = 0;
-    transient Node<E> first;
-    transient Node<E> last;
-
-    SimpleList() {
-        container = new <Node<E>>[10];
-    }
-
-    SimpleList(int size) {
-        container = new <Node<E>> [size];
-    }
-
-    public Node<E>[] grows () {
-        Node<E>[] newList = new <Node<E>>[size * 2];
-        System.arraycopy(container, 0 , newList, 0, size * 2);
-        return newList;
-    }
-
-    public E delete() {
-
-    }
+    private Node<E> head;
 
     public void add(E value) {
         modCount++;
-        Node<E> newNode = new Node<>(value, last, null);
-        if (last == null) {
-            first = new Node<>(value, newNode, null);
-        } else {
-            last.setNextNode(newNode);
+        Node<E> newNode = new Node<>(value, null);
+        if (head == null) {
+            head = newNode;
+            return;
         }
-        last = newNode;
-        if (size == container.length) {
-            grows();
+        Node<E> last = head;
+        while (last.getNextNode() != null) {
+            last = head.getNextNode();
         }
-        container[size++] = newNode;
+        last.setNextNode(newNode);
     }
 
     public E get(int index) throws IndexOutOfBoundsException {
-        Objects.checkIndex(index, size);
-        return container[index].getItem();
+        int counter = 1;
+        Node<E> node = head;
+        E result = node.getItem();
+        while (counter <= index) {
+            if (node.getNextNode() != null) {
+                result = node.getItem();
+                node = node.getNextNode();
+            } else {
+                result = node.getItem();
+            }
+            counter++;
+        }
+        return result;
     }
 
     @Override
     public Iterator<E> iterator() {
         return new CustomIterator();
     }
-
     class CustomIterator implements Iterator<E> {
         private int define = modCount;
-        private int flag = 0;
+        private Node<E> node = head;
 
         @Override
         public boolean hasNext() {
-            return flag < size;
+            return node.getNextNode() != null;
         }
 
         @Override
@@ -73,9 +57,10 @@ import java.util.*;
             if (define != modCount) {
                 throw new ConcurrentModificationException();
             }
-            return container[flag++].getItem();
+            E result = node.getItem();
+            node = node.getNextNode();
+            return result;
         }
     }
+}
 
-     */
-//}
