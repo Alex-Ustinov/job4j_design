@@ -15,7 +15,7 @@ public class SimpleList<E> implements Iterable<E> {
         }
         Node<E> last = head;
         while (last.getNextNode() != null) {
-            last = head.getNextNode();
+            last = last.getNextNode();
         }
         last.setNextNode(newNode);
     }

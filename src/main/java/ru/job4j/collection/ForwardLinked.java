@@ -29,15 +29,14 @@ public class ForwardLinked<T> implements Iterable<T> {
     }
 
     public T deleteLast() {
-        Node<T> last = null;
-        while (head.next != null) {
+        Node<T> last = head;
+        Node<T> beforeLast = head;
+        while (last.next != null) {
+            beforeLast = last;
             last = head.next;
-            break;
         }
-        Node<T> oldLast = last;
-        System.out.println(oldLast.value);
-        last = null;
-        return oldLast.value;
+        beforeLast.next = null;
+        return last.value;
     }
 
     @Override
