@@ -5,9 +5,11 @@ import java.util.*;
 public class SimpleList<E> implements Iterable<E> {
     private int modCount = 0;
     private Node<E> head;
+    private int size = 0;
 
     public void add(E value) {
         modCount++;
+        size++;
         Node<E> newNode = new Node<>(value, null);
         if (head == null) {
             head = newNode;
@@ -21,19 +23,12 @@ public class SimpleList<E> implements Iterable<E> {
     }
 
     public E get(int index) throws IndexOutOfBoundsException {
-        int counter = 1;
+        Objects.checkIndex(index, size);
         Node<E> node = head;
-        E result = node.getItem();
-        while (counter <= index) {
-            if (node.getNextNode() != null) {
-                result = node.getItem();
-                node = node.getNextNode();
-            } else {
-                result = node.getItem();
-            }
-            counter++;
+        for (int i = 0; i < index; i++) {
+            node = node.getNextNode();
         }
-        return result;
+        return node.getItem();
     }
 
     @Override
