@@ -32,10 +32,13 @@ public class ForwardLinked<T> implements Iterable<T> {
 
     public void revert() {
         ForwardLinked<T> pocket = new ForwardLinked<>();
-        Node<T> node = head;
+        Node<T> curr = head;
+        Node<T> prev = null;
 
-        while (node.next != null) {
-            pocket.add(this.deleteLast());
+        while (curr.next != null) {
+            prev = head;
+            curr = curr.next;
+            pocket.add(prev.value);
         }
     }
 
