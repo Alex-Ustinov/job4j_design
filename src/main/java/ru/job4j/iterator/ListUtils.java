@@ -50,8 +50,7 @@ public class ListUtils {
         while (iterator.hasNext()) {
             T item = iterator.next();
             if (filter.test(item)) {
-                iterator.remove();
-                iterator.add(value);
+                iterator.set(value);
             }
         }
         return list;
