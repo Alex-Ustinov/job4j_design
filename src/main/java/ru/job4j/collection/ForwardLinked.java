@@ -32,7 +32,7 @@ public class ForwardLinked<T> implements Iterable<T> {
 
     public void revert() {
         ForwardLinked<T> pocket = new ForwardLinked<>();
-        Node<T> curr = head;
+        Node<T> curr = this.head;
         Node<T> prev = null;
 
         while (curr.next != null) {
