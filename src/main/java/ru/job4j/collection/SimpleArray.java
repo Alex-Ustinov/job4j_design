@@ -7,6 +7,10 @@ public class SimpleArray<T> implements Iterable<T> {
     private int size = 0;
     private int modCount = 0;
 
+    public Integer getSize() {
+        return size;
+    }
+
     SimpleArray() {
         container = new Object[10];
     }
