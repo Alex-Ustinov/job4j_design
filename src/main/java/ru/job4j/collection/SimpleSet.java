@@ -14,6 +14,10 @@ public class SimpleSet<T> implements Iterable<T> {
         simpleArray = new SimpleArray(size);
     }
 
+    public boolean checkingEquals(T item1, T item2) {
+        return Objects.equals(item1, item2);
+    }
+
     public void add(T model) {
         boolean flag = false;
         modCount++;
@@ -26,7 +30,7 @@ public class SimpleSet<T> implements Iterable<T> {
         }
         */
         for (T item : simpleArray) {
-            if (model.equals(item)) {
+            if (checkingEquals(model, item)) {
                 flag = true;
                 break;
             }

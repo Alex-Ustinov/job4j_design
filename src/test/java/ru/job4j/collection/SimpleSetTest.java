@@ -17,6 +17,7 @@ public class SimpleSetTest {
         simpleSet.add(1);
         simpleSet.add(2);
         simpleSet.add(2);
+        simpleSet.add(null);
         simpleSet.add(1);
 
         Iterator<Integer> iterator = simpleSet.iterator();
