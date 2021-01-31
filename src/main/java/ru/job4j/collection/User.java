@@ -14,12 +14,29 @@ public class User {
         this.birthday = birthday;
     }
 
+//      @Override
+//      public int hashCode() {
+//         return Objects.hash(name, children, birthday, cursor);
+//      }
+
+    @Override
+    public boolean equals(Object o) {
+        System.out.println("!!!!!!!!!!");
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return children == user.children && Objects.equals(name, user.name) && Objects.equals(birthday, user.birthday) && Objects.equals(cursor, user.cursor);
+    }
+
     public static void main(String[] args) {
-        System.out.println(5 % 43);
-        System.out.println(5 % 16);
         HashMap<User, Object> users = new HashMap();
-        users.put(new User("Alex", 0, new GregorianCalendar(2017, 0, 25)), new Object());
-        users.put(new User("Alex", 0, new GregorianCalendar(2017, 0, 25)), new Object());
-        System.out.println(users);
+        User user1 = new User("Alex", 0, new GregorianCalendar(2017, 0, 25));
+        User user2 = new User("Alex", 0, new GregorianCalendar(2017, 0, 25));
+        System.out.println(user1.hashCode());
+        System.out.println(user2.hashCode());
+        users.put(user1, new Object());
+        users.put(user2, new Object());
+        //System.out.println(user1.equals(user2));
+        //System.out.println(users);
     }
 }
