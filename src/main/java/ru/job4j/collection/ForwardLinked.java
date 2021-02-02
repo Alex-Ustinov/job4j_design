@@ -34,16 +34,23 @@ public class ForwardLinked<T> implements Iterable<T> {
         return value;
     }
 
-    public void revert() {
-        ForwardLinked<T> pocket = new ForwardLinked<>();
-        Node<T> curr = this.head;
-        Node<T> prev = null;
+    public void addFirst(T value) {
+        Node<T> node = new Node<>(value, head);
+        head = node;
+    }
 
-        while (curr.next != null) {
-            prev = head;
-            curr = curr.next;
-            pocket.add(prev.value);
+    public void revert() {
+        if (head == null || head.next == null) {
+            return;
         }
+        ForwardLinked<T> list = new ForwardLinked<>();
+        for (int i = 0; i < size; i++) {
+            list.addFirst(deleteLast());
+        }
+        for (T item : list) {
+            System.out.println(item);
+        }
+        this.head = list.head;
     }
 
     public T deleteLast() {
