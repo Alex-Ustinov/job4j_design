@@ -6,10 +6,16 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 
 public class HashArray<K, V> implements Iterable<V> {
-    private Entry[] table;
+    private Entry<K, V>[] table;
     private int modCount = 0;
+    private int count = 0;
+    private double loadFactor = 0.75;
 
-    public int getIndex(K key, int size) {
+    HashArray(double loadFactor) {
+        this.loadFactor = loadFactor;
+    }
+
+    private int getIndex(K key, int size) {
         int keyHash = Objects.hash(key);
         int index = keyHash % size;
         return index;
@@ -25,27 +31,34 @@ public class HashArray<K, V> implements Iterable<V> {
     }
 
     public boolean insert(K key, V value) {
-        if (table.length - 1 == modCount) {
+        if (table.length - 1 == count || count / table.length >= 0.75) {
             expandTable();
         }
         int newIndex = getIndex(key, table.length - 1);
         Entry basket = new Entry(key, value);
         table[newIndex] = basket;
         modCount++;
+        count++;
         return true;
     }
 
     public V get(K key) {
         int index = getIndex(key, table.length - 1);
-        return table[index].getValue();
+        if (Objects.equals(table[index].getKey(), key)) {
+            return table[index].getValue();
+        }
+        return null;
     }
 
     public boolean delete(K key) {
         int index = getIndex(key, table.length - 1);
         if (Objects.checkIndex(index, table.length) > 0) {
-            table[index] = null;
-            modCount--;
-            return true;
+            if (Objects.equals(table[index].getKey(), key)) {
+                table[index] = null;
+                modCount++;
+                count--;
+                return true;
+            }
         }
         return false;
     }
@@ -97,7 +110,7 @@ public class HashArray<K, V> implements Iterable<V> {
                 throw new NoSuchElementException();
             }
             if (define != modCount) {
-                throw new ConcurrentModificationException()
+                throw new ConcurrentModificationException();
             }
             V result = table[cursor].getValue();
             cursor++;
