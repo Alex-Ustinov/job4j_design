@@ -25,34 +25,41 @@ public class HashArray<K, V> implements Iterable<V> {
         Entry[] newTable = new Entry[table.length * 2];
         for (int i = 0; i < table.length; i++) {
             int newIndex = getIndex(table[i].key, newTable.length);
-            newTable[newIndex] = table[i];
+            if (table[i] != null) {
+                newTable[newIndex] = table[i];
+            }
         }
         table = newTable;
     }
 
     public boolean insert(K key, V value) {
-        if (table.length - 1 == count || count / table.length >= 0.75) {
+        if (count / table.length >= loadFactor) {
             expandTable();
         }
         int newIndex = getIndex(key, table.length - 1);
         Entry basket = new Entry(key, value);
-        table[newIndex] = basket;
-        modCount++;
-        count++;
-        return true;
+        if (table[newIndex] == null) {
+            table[newIndex] = basket;
+            modCount++;
+            count++;
+            return true;
+        }
+        return false;
     }
 
     public V get(K key) {
         int index = getIndex(key, table.length - 1);
-        if (Objects.equals(table[index].getKey(), key)) {
-            return table[index].getValue();
+        if (table[index] != null) {
+            if (Objects.equals(table[index].getKey(), key)) {
+                return table[index].getValue();
+            }
         }
         return null;
     }
 
     public boolean delete(K key) {
         int index = getIndex(key, table.length - 1);
-        if (Objects.checkIndex(index, table.length) > 0) {
+        if (table[index] != null) {
             if (Objects.equals(table[index].getKey(), key)) {
                 table[index] = null;
                 modCount++;
@@ -94,25 +101,24 @@ public class HashArray<K, V> implements Iterable<V> {
         return new InnerIterator();
     }
 
-    class InnerIterator implements Iterator<V> {
-
+    class InnerIterator implements Iterator<K> {
         private int define = modCount;
         private int cursor = 0;
 
         @Override
         public boolean hasNext() {
-            return table.length > cursor;
+            return table.length > cursor && table[cursor].getValue() != null;
         }
 
         @Override
-        public V next() {
+        public K next() {
             if (!hasNext()) {
                 throw new NoSuchElementException();
             }
             if (define != modCount) {
                 throw new ConcurrentModificationException();
             }
-            V result = table[cursor].getValue();
+            K result = table[cursor].getKey();
             cursor++;
             return result;
         }
