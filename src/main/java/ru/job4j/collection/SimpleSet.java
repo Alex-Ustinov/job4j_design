@@ -15,7 +15,7 @@ public class SimpleSet<T> implements Iterable<T> {
     }
 
     public void add(T model) {
-        if (contains(model)) {
+        if (!contains(model)) {
             simpleArray.add(model);
         }
     }
