@@ -9,6 +9,25 @@ class Tree<E> implements SimpleTree<E> {
         this.root = new Node<>(root);
     }
 
+//    public boolean search(E value) {
+//        Optional<Node<E>> rsl = Optional.empty();
+//        Queue<Node<E>> data = new LinkedList<>();
+//        data.offer(this.root);
+//        while (!data.isEmpty()) {
+//            Node<E> el = data.poll();
+//            if (el.value.equals(value)) {
+//                rsl = Optional.of(el);
+//                break;
+//            }
+//            data.addAll(el.children);
+//        }
+//        return rsl;
+//    }
+
+    public boolean isBinary() {
+        return false;
+    }
+
     @Override
     public boolean add(E parent, E child) {
         boolean rsl = false;

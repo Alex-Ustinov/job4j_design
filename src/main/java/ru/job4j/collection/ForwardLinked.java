@@ -47,17 +47,14 @@ public class ForwardLinked<T> implements Iterable<T> {
         for (int i = 0; i < size; i++) {
             list.addFirst(deleteLast());
         }
-        for (T item : list) {
-            System.out.println(item);
-        }
         this.head = list.head;
     }
 
     public T deleteLast() {
-        size--;
         if (head == null) {
             throw new NoSuchElementException();
-        } else if (head.next == null) {
+        }
+        if (head.next == null) {
             T rsl = head.value;
             head = null;
             return rsl;
@@ -69,6 +66,7 @@ public class ForwardLinked<T> implements Iterable<T> {
             last = head.next;
         }
         beforeLast.next = null;
+        size--;
         return last.value;
     }
 
