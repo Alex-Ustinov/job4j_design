@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
-public class HashArray<K, V> implements Iterable<V> {
+public class HashArray<K, V> implements Iterable<K> {
     private Entry<K, V>[] table;
     private int modCount = 0;
     private int count = 0;
@@ -97,7 +97,7 @@ public class HashArray<K, V> implements Iterable<V> {
     }
 
     @Override
-    public Iterator<V> iterator() {
+    public Iterator<K> iterator() {
         return new InnerIterator();
     }
 
