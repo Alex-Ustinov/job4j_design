@@ -15,7 +15,6 @@ class Tree<E> implements SimpleTree<E> {
         data.offer(this.root);
         while (!data.isEmpty()) {
             Node<E> el = data.poll();
-            //if (el.children.size() > 2) {
             if (predicate.test(el)) {
                 return false;
             }
@@ -25,7 +24,8 @@ class Tree<E> implements SimpleTree<E> {
     }
 
     public boolean isBinary() {
-        return false;
+        Predicate<Node<E>> predicate = item -> item.children.size() > 2;
+        return search(predicate);
     }
 
     @Override
