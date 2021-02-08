@@ -1,6 +1,7 @@
 package ru.job4j.tree;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 class Tree<E> implements SimpleTree<E> {
     private final Node<E> root;
@@ -9,20 +10,19 @@ class Tree<E> implements SimpleTree<E> {
         this.root = new Node<>(root);
     }
 
-//    public boolean search(E value) {
-//        Optional<Node<E>> rsl = Optional.empty();
-//        Queue<Node<E>> data = new LinkedList<>();
-//        data.offer(this.root);
-//        while (!data.isEmpty()) {
-//            Node<E> el = data.poll();
-//            if (el.value.equals(value)) {
-//                rsl = Optional.of(el);
-//                break;
-//            }
-//            data.addAll(el.children);
-//        }
-//        return rsl;
-//    }
+    public boolean search(Predicate<Node<E>> predicate) {
+        Queue<Node<E>> data = new LinkedList<>();
+        data.offer(this.root);
+        while (!data.isEmpty()) {
+            Node<E> el = data.poll();
+            //if (el.children.size() > 2) {
+            if (predicate.test(el)) {
+                return false;
+            }
+            data.addAll(el.children);
+        }
+        return true;
+    }
 
     public boolean isBinary() {
         return false;
@@ -31,19 +31,9 @@ class Tree<E> implements SimpleTree<E> {
     @Override
     public boolean add(E parent, E child) {
         boolean rsl = false;
-        Queue<Node<E>> data = new LinkedList<>();
-        data.add(this.root);
-        while (!data.isEmpty()) {
-            Node<E> el = data.poll();
-            if (el.value.equals(parent)) {
-                if (!el.children.contains(child)) {
-                    Node<E> newNode = new SimpleTree.Node<>(child);
-                    el.children.add(newNode);
-                    rsl = true;
-                    return rsl;
-                }
-            }
-            data.addAll(el.children);
+        if (findBy(parent).isPresent() && !findBy(parent).get().children.contains(child)) {
+            findBy(parent).get().children.add(new Node<>(child));
+            rsl = true;
         }
         return rsl;
     }

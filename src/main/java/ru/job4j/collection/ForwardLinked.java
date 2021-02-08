@@ -45,7 +45,7 @@ public class ForwardLinked<T> implements Iterable<T> {
         }
         ForwardLinked<T> list = new ForwardLinked<>();
         for (int i = 0; i < size; i++) {
-            list.addFirst(deleteLast());
+            list.addFirst(deleteFirst());
         }
         this.head = list.head;
     }
