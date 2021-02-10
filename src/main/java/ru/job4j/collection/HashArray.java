@@ -107,7 +107,14 @@ public class HashArray<K, V> implements Iterable<K> {
 
         @Override
         public boolean hasNext() {
-            return table.length > cursor && table[cursor].getValue() != null;
+            if (table.length > cursor) {
+                for (int i = cursor; i < table.length; i++) {
+                    if (table[i].getValue() != null) {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
         @Override
