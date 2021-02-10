@@ -6,18 +6,24 @@ public class Analize {
     public Info diff(List<User> previous, List<User> current) {
         Info info = new Info();
         Map difference = new HashMap<String, User>();
-        for (User user : previous) {
-            if (!current.contains(user)) {
-                //difference.put(user.id, user);
-                System.out.println(user.name);
+        for (User previousUser : previous) {
+            if (!current.contains(previousUser)) {
+                System.out.println(previousUser.name);
                 info.deleted++;
+            } else {
+                difference.put(previousUser.id, previousUser.name);
             }
         }
-//        for (User previousUser : previous) {
-//            if (difference.keySet().contains(previousUser.id)) {
-//                info.changed++;
-//            }
-//        }
+        for (User currentUser : current) {
+            if (difference.keySet().contains(currentUser.id)) {
+                if (!currentUser.name.equals(difference.get(currentUser.id))) {
+                    info.changed++;
+                }
+            }
+            if (!previous.contains(currentUser)) {
+                info.added++;
+            }
+        }
         return info;
     }
 
