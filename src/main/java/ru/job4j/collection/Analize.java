@@ -74,9 +74,10 @@ public class Analize {
 
         User user6 = new User(3, "Adam");
         User user7 = new User(5, "Nicole");
+        User user8 = new User(6, "Sam");
 
         List<User> previous = List.of(user1, user2, user3, user4, user5);
-        List<User> current = List.of(user1, user2, user6, user7);
+        List<User> current = List.of(user1, user2, user6, user7, user8);
         Analize analize = new Analize();
         Info info = analize.diff(previous, current);
         System.out.println(info);
