@@ -1,29 +1,40 @@
 package ru.job4j.collection;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Analize {
     public Info diff(List<User> previous, List<User> current) {
         Info info = new Info();
-        Map difference = new HashMap<String, User>();
-        for (User previousUser : previous) {
-            if (!current.contains(previousUser)) {
-                System.out.println(previousUser.name);
-                info.deleted++;
-            } else {
-                difference.put(previousUser.id, previousUser.name);
-            }
-        }
-        for (User currentUser : current) {
-            if (difference.keySet().contains(currentUser.id)) {
-                if (!currentUser.name.equals(difference.get(currentUser.id))) {
+        Set<User> checkSet = current.stream().
+                collect(Collectors.toSet());
+        Map<Integer, User> difference = previous.stream()
+                .collect(Collectors.toMap(User::getId, user -> user));
+        for (User user : current) {
+            if (difference.keySet().contains(user.id)) {
+                if (!user.name.equals(difference.get(user.id).getName())) {
                     info.changed++;
                 }
-            }
-            if (!previous.contains(currentUser)) {
+            } else {
                 info.added++;
             }
         }
+
+        for (User previousUser : previous) {
+            if (checkSet.add(previousUser)) {
+                info.deleted++;
+            }
+        }
+
+//        HashSet<User> differenceHashSet = new HashSet<User>(difference.values());
+//        Iterator<User> iterator = differenceHashSet.iterator();
+//        while (iterator.hasNext()) {
+//            User checkUser = iterator.next();
+//            if (!current.contains(checkUser)) {
+//                info.deleted++;
+//            }
+//        }
+
         return info;
     }
 
@@ -36,6 +47,23 @@ public class Analize {
             this.name = name;
         }
 
+        public String getName() {
+            return name;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+
+        @Override
+        public String toString() {
+            return "User{"
+                    + "id=" + id
+                    + ", name='" + name + '\''
+                    + '}';
+        }
+
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
@@ -46,7 +74,7 @@ public class Analize {
 
         @Override
         public int hashCode() {
-            return Objects.hash(id, name);
+            return Objects.hash(id);//name
         }
     }
 
@@ -77,7 +105,7 @@ public class Analize {
         User user8 = new User(6, "Sam");
 
         List<User> previous = List.of(user1, user2, user3, user4, user5);
-        List<User> current = List.of(user1, user2, user6, user7, user8);
+        List<User> current = List.of(user2, user6, user7, user8);
         Analize analize = new Analize();
         Info info = analize.diff(previous, current);
         System.out.println(info);
