@@ -6,8 +6,6 @@ import java.util.stream.Collectors;
 public class Analize {
     public Info diff(List<User> previous, List<User> current) {
         Info info = new Info();
-        Set<User> checkSet = current.stream().
-                collect(Collectors.toSet());
         Map<Integer, User> difference = previous.stream()
                 .collect(Collectors.toMap(User::getId, user -> user));
         for (User user : current) {
@@ -19,22 +17,7 @@ public class Analize {
                 info.added++;
             }
         }
-
-        for (User previousUser : previous) {
-            if (checkSet.add(previousUser)) {
-                info.deleted++;
-            }
-        }
-
-//        HashSet<User> differenceHashSet = new HashSet<User>(difference.values());
-//        Iterator<User> iterator = differenceHashSet.iterator();
-//        while (iterator.hasNext()) {
-//            User checkUser = iterator.next();
-//            if (!current.contains(checkUser)) {
-//                info.deleted++;
-//            }
-//        }
-
+        info.deleted = previous.size() - ((info.added + current.size()) - info.changed);
         return info;
     }
 
@@ -69,12 +52,12 @@ public class Analize {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             User user = (User) o;
-            return id == user.id;// && Objects.equals(name, user.name);
+            return id == user.id;
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(id);//name
+            return Objects.hash(id);
         }
     }
 
