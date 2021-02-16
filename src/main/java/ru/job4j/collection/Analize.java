@@ -17,7 +17,7 @@ public class Analize {
                 info.added++;
             }
         }
-        info.deleted = previous.size() - ((info.added + current.size()) - info.changed);
+        info.deleted = previous.size() + info.added - current.size();
         return info;
     }
 
