@@ -5,4 +5,4 @@ hibernate.connection.url=jdbcpostgresql127.0.0.15432trackstudio
 hibernate.connection.driver_class=org.postgresql.Driver
 hibernate.connection.username=postgres
 hibernate.connection.password=password
-test=myParam // Some comment
+test=myParam # Some comment

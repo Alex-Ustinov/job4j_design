@@ -25,12 +25,9 @@ public class Config {
                 if (data.length == 2) {
                     String key = data[0];
                     String value = data[1];
-                    value = value.replaceAll("\\s+","");
-                    if (value.contains("//")) {
-                        String regExp = ".*////.*"; //[A-z,a-z,0-9]
-                        Matcher matcher = Pattern.compile(regExp).matcher(value);
-                        System.out.println(value + " " + matcher.start());
-                        value = value.substring(0, matcher.start());
+                    if (value.contains("#")) {
+                        System.out.println(value);
+                        value = value.substring(0, value.indexOf("#"));
                     }
                     value.replaceAll("\\s","");
                     config.put(key, value);
