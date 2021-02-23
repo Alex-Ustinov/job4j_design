@@ -18,23 +18,16 @@ public class Config {
     }
 
     public void load() throws FileNotFoundException {
-        HashMap<String, String> config = new HashMap<>();
         try (BufferedReader in = new BufferedReader(new FileReader(this.path))) {
             for (String line = in.readLine(); line != null; line = in.readLine()) {
                 String[] data = line.split("=");
                 if (data.length == 2) {
                     String key = data[0];
                     String value = data[1];
-                    if (value.contains("#")) {
-                        System.out.println(value);
-                        value = value.substring(0, value.indexOf("#"));
+                    if (!value.contains("#")) {
+                        values.put(key, value);
                     }
-                    value.replaceAll("\\s","");
-                    config.put(key, value);
                 }
-            }
-            for (Map.Entry<String, String> item : config.entrySet()) {
-                System.out.println("key " + item.getKey() + " value " + item.getValue());
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -43,7 +36,7 @@ public class Config {
     }
 
     public String value(String key) {
-        throw new UnsupportedOperationException("Don't impl this method yet!");
+        return values.get(key);
     }
 
     @Override
