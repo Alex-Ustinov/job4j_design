@@ -13,7 +13,7 @@ import static org.junit.Assert.assertThat;
 
 public class EmailExamTest {
     @Test
-    public void whenAddThenGet() {
+    public void whenAdd5and2TheSame() {
         EmailExam emailExam = new EmailExam();
         ArrayList<String> user1Emails = new ArrayList<>();
         user1Emails.add("xxx@ya.ru");
@@ -30,35 +30,18 @@ public class EmailExamTest {
         user4Emails.add("aaa@bbb.ru");
         ArrayList<String> user5Emails = new ArrayList<>();
         user5Emails.add("xyz@pisem.net");
-
         //EmailExam.User user1 = new EmailExam.User(Arrays.asList("xxx@ya.ru", "foo@gmail.com", "lol@mail.ru"));
         EmailExam.User user1 = emailExam.new User(user1Emails);
         EmailExam.User user2 = emailExam.new User(user2Emails);
         EmailExam.User user3 = emailExam.new User(user3Emails);
         EmailExam.User user4 = emailExam.new User(user4Emails);
         EmailExam.User user5 = emailExam.new User(user5Emails);
-
         emailExam.addUser(user1);
         emailExam.addUser(user2);
         emailExam.addUser(user3);
         emailExam.addUser(user4);
         emailExam.addUser(user5);
-
         Map<String, EmailExam.User> test = emailExam.getContainer();
-
-        for (Map.Entry<String, EmailExam.User> u : test.entrySet()) {
-            //System.out.println(" key "+ u.getKey() + " value "+u.getValue());
-        }
-        //System.out.println("user1 " + user1);
         assertThat(test.size(), is(2));
     }
-
-    @Test
-    public void whenAddThenIt() {
-        SimpleArray<String> array = new SimpleArray<>();
-        array.add("first");
-        String rsl = array.iterator().next();
-        assertThat(rsl, is("first"));
-    }
-
 }
