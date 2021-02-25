@@ -6,8 +6,6 @@ import java.io.FileReader;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringJoiner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Config {
     private final String path;
@@ -21,12 +19,10 @@ public class Config {
         try (BufferedReader in = new BufferedReader(new FileReader(this.path))) {
             for (String line = in.readLine(); line != null; line = in.readLine()) {
                 String[] data = line.split("=");
-                if (data.length == 2) {
+                if (data.length == 2 && !line.contains("#")) {
                     String key = data[0];
                     String value = data[1];
-                    if (!value.contains("#")) {
-                        values.put(key, value);
-                    }
+                    values.put(key, value);
                 }
             }
         } catch (Exception e) {
