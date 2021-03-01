@@ -7,21 +7,30 @@ import java.util.stream.Collectors;
 public class EmailExam {
     private Map<String, User> container = new HashMap<>();
 
-    public void addUser(User user) {
+    public List<String> searchExistUser(User user) {
         Predicate<String> predicate = (el) -> Arrays.stream(el.split(","))
                 .anyMatch(userEmail -> user.emails.contains(userEmail));
         List<String> existUser = container.keySet()
                 .stream()
                 .filter(predicate)
                 .collect(Collectors.toList());
+        return existUser;
+    }
+
+    public void changeUser(User user, List<String> existUser) {
+        String keyInitialUser = existUser.iterator().next();
+        User initialUser = container.get(keyInitialUser);
+        for (String userEmails : user.emails) {
+            initialUser.addEmail(userEmails);
+        }
+        container.remove(keyInitialUser);
+        container.put(String.join(",", initialUser.emails), initialUser);
+    }
+
+    public void addUser(User user) {
+        List<String> existUser = searchExistUser(user);
         if (existUser.size() == 1) {
-            String keyInitialUser = existUser.iterator().next();
-            User initialUser = container.get(keyInitialUser);
-            for (String userEmails : user.emails) {
-                initialUser.addEmail(userEmails);
-            }
-            container.remove(keyInitialUser);
-            container.put(String.join(",", initialUser.emails), initialUser);
+            changeUser(user, existUser);
             return;
         }
         container.put(String.join(",", user.emails), user);
