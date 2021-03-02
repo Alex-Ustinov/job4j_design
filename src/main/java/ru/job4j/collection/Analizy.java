@@ -33,7 +33,7 @@ public class Analizy {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        try (PrintWriter out = new PrintWriter(new FileOutputStream("unavailable.csv"))) {
+        try (PrintWriter out = new PrintWriter(new FileOutputStream(target))) {
             for (ArrayList<String> log : innerLog) {
                 out.println(log.get(0) + ";" + log.get(1));
             }

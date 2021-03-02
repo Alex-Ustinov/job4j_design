@@ -3,6 +3,8 @@ package ru.job4j.collection;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import static org.junit.Assert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 import java.io.*;
 
@@ -12,15 +14,22 @@ public class AnalizyTest {
 
     @Test
     public void drop() throws IOException {
-        File sours = folder.newFile("out.txt");
-        File target = folder.newFile("in.txt");
-
-        try (BufferedReader in = new BufferedReader(new FileReader(sours))) {
-            //in.lines().forEach(rsl::append);
+        File sours = folder.newFile("source.txt");
+        File target = folder.newFile("target.txt");
+        try {
+            PrintWriter print = new PrintWriter(sours);
+            print.println("200 10:35:01");
+            print.println("400 10:46:02");
+            print.println("200 10:57:03");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        new Analizy().unavailable(sours.getPath(), target.getPath());
 
-        try (PrintWriter print = new PrintWriter(target)) {
-            print.println();
+        StringBuilder rsl = new StringBuilder();
+        try (BufferedReader in = new BufferedReader(new FileReader(target))) {
+            in.lines().forEach(rsl::append);
         }
+        assertThat(rsl.toString(), is("400 10:46:02 200 10:57:03"));
     }
 }
