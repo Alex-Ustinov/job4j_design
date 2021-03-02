@@ -15,7 +15,7 @@ public class Analizy {
                 String time = logLine[1];
                 for (String signal : blockSignals) {
                     if (serverSignal.equals(signal)) {
-                        ArrayList<String> newItem = new ArrayList<String>();
+                        ArrayList<String> newItem = new ArrayList<String>(2);
                         newItem.add(time);
                         innerLog.add(newItem);
                     }
