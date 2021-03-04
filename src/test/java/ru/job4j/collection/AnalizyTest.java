@@ -16,14 +16,12 @@ public class AnalizyTest {
     public void drop() throws IOException {
         File sours = folder.newFile("source.txt");
         File target = folder.newFile("target.txt");
-        try {
-            PrintWriter print = new PrintWriter(sours);
+        try (PrintWriter print = new PrintWriter(sours)) {
             print.println("200 10:35:01");
             print.println("400 10:46:02");
             print.println("200 10:57:03");
-        } catch (Exception e) {
-            e.printStackTrace();
         }
+        
         new Analizy().unavailable(sours.getPath(), target.getPath());
 
         StringBuilder rsl = new StringBuilder();
