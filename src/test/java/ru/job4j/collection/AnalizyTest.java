@@ -21,7 +21,7 @@ public class AnalizyTest {
             print.println("400 10:46:02");
             print.println("200 10:57:03");
         }
-        
+
         new Analizy().unavailable(sours.getPath(), target.getPath());
 
         StringBuilder rsl = new StringBuilder();
