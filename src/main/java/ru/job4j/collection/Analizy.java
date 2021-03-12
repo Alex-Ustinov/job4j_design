@@ -14,11 +14,9 @@ public class Analizy {
                 String[] logLine = line.split(" ");
                 String serverSignal = logLine[0];
                 String time = logLine[1];
-                for (String signal : blockSignals) {
-                    if (serverSignal.equals(signal) && isActive) {
-                        out.println(serverSignal + " ; " + time);
-                        isActive = false;
-                    }
+                if (serverSignal.equals("400") || serverSignal.equals("500") && isActive) {
+                    out.println(serverSignal + " ; " + time);
+                    isActive = false;
                 }
                 if (logLine.length > 0 && !serverSignal.equals("400") && !serverSignal.equals("500") && !isActive) {
                     out.println(serverSignal + " ; " + time);
