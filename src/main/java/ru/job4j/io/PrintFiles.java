@@ -17,7 +17,7 @@ public class PrintFiles implements FileVisitor<Path> {
 
     @Override
     public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-        System.out.println(file.toAbsolutePath());
+        //System.out.println(file.toAbsolutePath());
         return CONTINUE;
     }
 
