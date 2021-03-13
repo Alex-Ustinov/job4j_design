@@ -6,37 +6,30 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.nio.file.attribute.FileTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class SearchFiles extends SimpleFileVisitor<Path> {
+public class SearchFiles extends PrintFiles {
     private Predicate predicate;
-    private Path root;
-    //private PrintFiles printFiles = new PrintFiles();
+    private List<Path> files = new ArrayList();
 
-    SearchFiles(Predicate predicate, Path root) {
+    SearchFiles(Predicate predicate) {
         this.predicate = predicate;
-        this.root = root;
     }
 
     @Override
     public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+        if (attrs.isRegularFile()) {
+            if (predicate.test(file)) {
+                files.add(file.toAbsolutePath());
+            }
+        }
         return super.visitFile(file, attrs);
     }
 
-    public List<Path> getPaths() throws IOException {
-        List<Path> result = new ArrayList();
-
-        //Path tree = visitFile(root);
-        //Path way = root.toAbsolutePath();
-        Path items = Files.walkFileTree(root, new PrintFiles());
-        Path path = items.getFileName();
-        System.out.println(path);
-        if (predicate.test(path)) {
-            System.out.println(path);
-            result.add(path);
-        }
-        return result;
+    public List<Path> getPaths() {
+        return files;
     }
 }
