@@ -10,49 +10,44 @@ public class ArgZip {
     private final String[] args;
 
     public ArgZip(String[] args) {
-        String[] bunchArgs = args[0].split(" ");
         int index = 0;
         String[] initialArgs = new String[100];
-        for (String arg : bunchArgs) {
-            args[index++] = arg;
+        for (String arg : args) {
+            String[] keyVal = arg.split("=");
+            if (keyVal.length == 2) {
+                initialArgs[index++] = keyVal[1];
+            }
         }
         this.args = initialArgs;
         valid();
     }
 
+    public String[] getArgs() {
+        return args;
+    }
+
     public boolean valid() {
-        for (String arg : args) {
-            String[] keyVal = arg.split("=");
-            if (keyVal.length < 2) {
-                System.out.println("There are not enough params");
-                return false;
-            }
-        }
-        return true;
+        return this.args.length == 3 ? true : false;
     }
 
     public String directory() {
-        return null;
+        if (valid()) {
+            return args[0];
+        }
+        return "";
     }
 
     public String exclude() {
-        return null;
+        if (valid()) {
+            return args[1];
+        }
+        return "";
     }
 
     public String output() {
-        String Way = "./";
-        String condition = "";
-        for (String arg : args) {
-            String[] keyVal = arg.split("=");
-            if (keyVal[0] == "-d") {
-                Way = keyVal[1];
-            }
-            if (keyVal[0] == "-e") {
-                condition = keyVal[1];
-            }
+        if (valid()) {
+            return args[2];
         }
-        Path path = Paths.get(Way);
-        Predicate<Path> predicate = p -> p.toFile().getName().endsWith(condition);
-        return null;
+        return "";
     }
 }
