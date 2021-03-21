@@ -2,6 +2,8 @@ package ru.job4j.io;
 
 import java.io.*;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ConsoleChat {
     private final String path;
@@ -9,6 +11,9 @@ public class ConsoleChat {
     private static final String OUT = "закончить";
     private static final String STOP = "стоп";
     private static final String CONTINUE = "продолжить";
+    private List<String> userWordsList;
+    private List<String> botWordsList;
+    private Boolean flag = true;
 
     public String readFile(String path) {
         StringBuilder builder = new StringBuilder();
@@ -31,38 +36,55 @@ public class ConsoleChat {
         }
     }
 
-
     public ConsoleChat(String path, String botAnswers) {
         this.path = path;
         this.botAnswers = botAnswers;
+
+        String userFile = readFile(path);
+        String[] userWords = userFile.split("\\n");
+        userWordsList = List.of(userWords);
+
+        String botFile = readFile(botAnswers);
+        String[] botWords = botFile.split("\\n");
+        botWordsList = List.of(botWords);
     }
 
     public void run() {
-        String userFile = readFile(path);
-        String[] userWords = userFile.split(" ");
-        int nUser = (int) Math.floor(Math.random() * userWords.length);
-        String userWord = userWords[nUser];
+        for (String w : userWordsList) {
+            System.out.println(w);
+        }
+        for (String wo : botWordsList) {
+            System.out.println(wo);
+        }
 
-        String botFile = readFile(botAnswers);
-        String[] botWords = botFile.split(" ");
-        int nBot = (int) Math.floor(Math.random() * botWords.length);
-        String botWord = botWords[nBot];
 
-        writeDataInFile(path, userWord);
+        int nUser = (int) Math.floor(Math.random() * userWordsList.size());
+        String userWord = userWordsList.get(nUser);
 
-        if (userWord.equals(STOP)) {
+        int nBot = (int) Math.floor(Math.random() * botWordsList.size());
+        String botWord = botWordsList.get(nBot);
+
+
+        while (flag) {
+            if (userWord.equals(STOP)) {
+                flag = true;
+            } else if (userWord.equals(OUT)) {
+                flag = false;
+            } else if (userWord.equals(CONTINUE)) {
+                flag = true;
+                writeDataInFile(path, userWord);
+                writeDataInFile(path, botWord);
+            } else {
+                flag = true;
+                writeDataInFile(path, userWord);
+                writeDataInFile(path, botWord);
+            }
             run();
-        } else if (userWord.equals(OUT)) {
-            return;
-        } else if (userWord.equals(CONTINUE)) {
-            writeDataInFile(path, botWord);
-        } else {
-            writeDataInFile(path, botWord);
         }
     }
 
     public static void main(String[] args) {
-        ConsoleChat cc = new ConsoleChat("./userFile.doc", "./botFile.doc");
+        ConsoleChat cc = new ConsoleChat("c:\\projects\\job4j_design\\userFile.docx", "c:\\projects\\job4j_design\\botFile.docx");
         cc.run();
     }
 }
