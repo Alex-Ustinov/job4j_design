@@ -15,7 +15,9 @@ public class ConsoleChat {
     private List<String> botWordsList;
     private Boolean flag = true;
 
-    public String readFile(String path) {
+    private List<String> log = new ArrayList<>();
+
+    public List<String> readFile(String path) {
         StringBuilder builder = new StringBuilder();
         try (BufferedReader br = new BufferedReader(new FileReader(path, Charset.forName("WINDOWS-1251")))) {
             int data;
@@ -25,12 +27,14 @@ public class ConsoleChat {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return builder.toString();
+        return List.of(builder.toString().split(System.lineSeparator()));
     }
 
-    public void writeDataInFile(String path, String data) {
+    public void writeDataInFile(String path, List<String> data) {
         try (BufferedWriter br = new BufferedWriter(new FileWriter(path, Charset.forName("WINDOWS-1251"), true))) {
-            br.write(data + System.lineSeparator());
+            for (String answer : data) {
+                br.write(answer + System.lineSeparator());
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -39,45 +43,31 @@ public class ConsoleChat {
     public ConsoleChat(String path, String botAnswers) {
         this.path = path;
         this.botAnswers = botAnswers;
-
-        String userFile = readFile(path);
-        String[] userWords = userFile.split("\\n");
-        userWordsList = List.of(userWords);
-
-        String botFile = readFile(botAnswers);
-        String[] botWords = botFile.split("\\n");
-        botWordsList = List.of(botWords);
+        userWordsList = readFile(path);
+        botWordsList = readFile(botAnswers);
     }
 
     public void run() {
-        for (String w : userWordsList) {
-            System.out.println(w);
-        }
-        for (String wo : botWordsList) {
-            System.out.println(wo);
-        }
-
-
         int nUser = (int) Math.floor(Math.random() * userWordsList.size());
         String userWord = userWordsList.get(nUser);
 
         int nBot = (int) Math.floor(Math.random() * botWordsList.size());
         String botWord = botWordsList.get(nBot);
 
-
         while (flag) {
             if (userWord.equals(STOP)) {
                 flag = true;
             } else if (userWord.equals(OUT)) {
                 flag = false;
+                writeDataInFile(path, log);
             } else if (userWord.equals(CONTINUE)) {
                 flag = true;
-                writeDataInFile(path, userWord);
-                writeDataInFile(path, botWord);
+                log.add(userWord);
+                log.add(botWord);
             } else {
                 flag = true;
-                writeDataInFile(path, userWord);
-                writeDataInFile(path, botWord);
+                log.add(userWord);
+                log.add(botWord);
             }
             run();
         }
