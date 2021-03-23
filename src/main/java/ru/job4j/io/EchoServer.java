@@ -31,13 +31,3 @@ public class EchoServer {
         }
     }
 }
-
-
-//                    if (str.contains("msg=Exit")) {
-//                        out.write("HTTP/1.1 200 OK\r\n\r\n".getBytes());
-//                        server.close();
-//                    } else if (str.contains("msg=Any")) {
-//                        out.write("What.".getBytes());
-//                    } else if (str.contains("msg=Hello")) {
-//                        out.write("Hello.".getBytes());
-//                    }
