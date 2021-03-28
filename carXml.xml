@@ -1,0 +1,7 @@
+<?xml version="1.1" encoding="UTF-8" ?>
+<car speed="111" isSell="false" type="Honda">
+    <spareWheels material="protected"/>
+    <wheels>
+        <spareWheels material="plain"/>
+    <wheels/>
+<car/>
