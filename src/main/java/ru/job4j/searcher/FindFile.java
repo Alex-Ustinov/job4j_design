@@ -4,14 +4,13 @@ import ru.job4j.io.ArgZip;
 import ru.job4j.io.Search;
 
 import java.io.*;
+import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 public class FindFile {
 
@@ -20,9 +19,9 @@ public class FindFile {
         if (typeSearch.equals("name")) {
             predicate = p -> p.toFile().getName().endsWith(fileName);
         } else {
-            //Pattern pattern = Pattern.compile(fileName);
-            //boolean flag = fileName.matches(typeSearch);
-            predicate = p -> p.toFile().getName().matches(fileName);
+            String patternString = preparePattern(fileName);
+            Pattern pattern = Pattern.compile(patternString);
+            predicate = p -> p.toFile().getName().matches(pattern.toString());
         }
 
         List<Path> listFiles = Searcher.getListFiles(path, predicate);
@@ -34,26 +33,53 @@ public class FindFile {
         return arrFiles;
     }
 
-    public void packFiles(List<File> sources, File target) {
-        try (ZipOutputStream zip = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(target)))) {
-            for (File source : sources) {
-                zip.putNextEntry(new ZipEntry(source.getPath()));
-                try (BufferedInputStream out = new BufferedInputStream(new FileInputStream(source))) {
-                    zip.write(out.readAllBytes());
+    private static String preparePattern(String pattern) {
+        StringBuilder str = new StringBuilder();
+        for (int i = 0; i < pattern.length(); i++) {
+            char c = pattern.charAt(i);
+            if (c == '*') {
+                str.append(".*");
+            } else if (c == '.') {
+                str.append(".\\");
+            } else {
+                str.append(c);
+            }
+        }
+        return str.toString();
+    }
+
+    public List<String> readFile(String path) {
+        StringBuilder builder = new StringBuilder();
+        try (BufferedReader br = new BufferedReader(new FileReader(path, Charset.forName("WINDOWS-1251")))) {
+            int data;
+            while ((data = br.read()) > 0) {
+                builder.append((char) data);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return List.of(builder.toString().split(System.lineSeparator()));
+    }
+
+    public void writeDataInFile(String path, List<File> data) {
+        try (BufferedWriter br = new BufferedWriter(new FileWriter(path, Charset.forName("WINDOWS-1251"), true))) {
+            for (File file : data) {
+                List<String> dataFile = readFile(file.getPath());
+                for (String answer : dataFile) {
+                    br.write(answer + System.lineSeparator());
                 }
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, Exception {
         AdjustArguments adjustArguments = new AdjustArguments(args);
         FindFile findFile = new FindFile();
         //FindFile findFile = new FindFile(new String[] {"-d=c:\\project\\job4j\\", "-t=name", "-n=project.txt",  "-o=result.txt"});
         Path path = Paths.get(adjustArguments.getDirectory());
-        List<File> arrFiles = findFile.getFilesList(path, adjustArguments.getTypeSearch(), String adjustArguments.getFileName());
-        File targetFile = new File(adjustArguments.getFileResult());
-        findFile.packFiles(arrFiles, targetFile);
+        List<File> arrFiles = findFile.getFilesList(path, adjustArguments.getTypeSearch(), adjustArguments.getFileName());
+        findFile.writeDataInFile(adjustArguments.getFileResult(), arrFiles);
     }
 }

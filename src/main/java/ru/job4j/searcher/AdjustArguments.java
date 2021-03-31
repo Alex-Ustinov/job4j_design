@@ -2,41 +2,52 @@ package ru.job4j.searcher;
 
 public class AdjustArguments {
 
-    private String directory;
-    private String typeSearch;
-    private String fileName;
-    private String fileResult;
+    private String[] args;
 
-    AdjustArguments(String[] args) {
+    AdjustArguments(String[] args) throws Exception {
+        int index = 0;
+        String[] initialArgs = new String[100];
         for (String arg : args) {
             String[] keyVal = arg.split("=");
             if (keyVal.length == 2) {
-                if (keyVal[0].equals("-d")) {
-                    this.directory = keyVal[1];
-                } else if (keyVal[0].equals("-t")) {
-                    this.typeSearch = keyVal[1];
-                } else if (keyVal[0].equals("-n")) {
-                    this.fileName = keyVal[1];
-                } else if (keyVal[0].equals("-o")) {
-                    this.fileResult = keyVal[1];
-                }
+                initialArgs[index++] = keyVal[1];
             }
+        }
+        this.args = initialArgs;
+        if (!valid()) {
+            throw new Exception("arguments is not appropriate");
         }
     }
 
+    public boolean valid() {
+        return this.args.length == 4 ? true : false;
+    }
+
     public String getDirectory() {
-        return directory;
+        if (this.args.length > 0) {
+            return this.args[0];
+        }
+        return "";
     }
 
     public String getFileName() {
-        return fileName;
+        if (this.args.length > 1) {
+            return this.args[1];
+        }
+        return "";
     }
 
     public String getFileResult() {
-        return fileResult;
+        if (this.args.length >= 2) {
+            return this.args[2];
+        }
+        return "";
     }
 
     public String getTypeSearch() {
-        return typeSearch;
+        if (this.args.length >= 3) {
+            return this.args[3];
+        }
+        return "";
     }
 }
