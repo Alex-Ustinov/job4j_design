@@ -1,0 +1,11 @@
+--select * from items
+--insert into roles (name) values ('admin')
+--ALTER TABLE users ADD COLUMN role_id int references roles(id)
+--insert into users (first_name, last_name, role_id) values('alex', 'Ustinov', 1)
+--insert into rules (name) values('severe')
+--insert into rules_roles (rule_id, role_id) values (1,1)
+--insert into categories (name) values ('employee')
+--insert into states (name) values('open')
+--insert into items(name, user_id, cattegory_id, state_id) values('laptop', 1, 1, 1)
+--insert into comments (text, item_id) values('test comment', 3)
+--insert into attaches (item_id) values (3) 
