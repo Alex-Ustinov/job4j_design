@@ -1,0 +1,51 @@
+create table users (
+ 	id serial primary key,
+	name varchar(255)
+ )
+
+create table skills (
+	id serial primary key,
+	name varchar(255),
+	user_id int references users(id) 
+)
+
+
+insert into users(name) values ('alex');
+insert into users(name) values ('oly');
+insert into users(name) values ('buran');
+insert into users(name) values ('nusha');
+insert into users(name) values ('hapiness');
+
+insert into skills(name, user_id) values ('java', 1);
+insert into skills(name, user_id) values ('digital', 2);
+insert into skills(name, user_id) values ('barking', 3);
+insert into skills(name, user_id) values ('murmuring', 4);
+insert into skills(name, user_id) values ('exists', 5);
+
+select u.name, s.name from users as u inner join skills as s on u.id = s.user_id 
+
+
+ create table departments (
+ 	id serial primary key,
+	name varchar(255)
+ )
+ 
+ create table employees (
+ 	id serial primary key,
+	name varchar(255),
+	department int references departments(id)
+ )
+
+insert into departments (name) values ('sellers');
+insert into departments (name) values ('support');
+insert into departments (name) values ('developers');
+
+
+insert into employees (name, department) values ('Ales', 3);
+insert into employees (name, department) values ('Sam', 1);
+insert into employees (name, department) values ('Poll', 2);
+insert into employees (name, department) values ('Oleg', 3);
+insert into employees (name, department) values ('Kate', 1);
+insert into employees (name, department) values ('Susane', 2);
+
+select * from employees as e inner join on departments d on d.id = e.department where department != 1
