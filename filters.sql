@@ -19,9 +19,9 @@ insert into type(name) values ('молоко');
 insert into product(name, type_id, expired_date, price) values ('best', 1, '2021-04-08 04:05:06', 100);
 insert into product(name, type_id, expired_date, price) values ('not best', 1, '2021-05-08 04:05:06', 50);
 insert into product(name, type_id, expired_date, price) values ('low quality', 1,'2021-05-08 04:05:06', 20);
-insert into product(name, type_id, expired_date, price) values ('nice', 2, '2021-04-08 04:05:06', 10);
-insert into product(name, type_id, expired_date, price) values ('more less ok', 2, '2021-04-08 04:05:06', 5);
-insert into product(name, type_id, expired_date, price) values ('can not be eaten', 2, '2021-04-08 04:05:06', 2);
+insert into product(name, type_id, expired_date, price) values ('мороженное nice', 2, '2021-04-08 04:05:06', 10);
+insert into product(name, type_id, expired_date, price) values ('мороженное more less ok', 2, '2021-04-08 04:05:06', 5);
+insert into product(name, type_id, expired_date, price) values ('мороженное can not be eaten', 2, '2021-04-08 04:05:06', 2);
 insert into product(name, type_id, expired_date, price) values ('tasty', 3, '2021-05-08 04:05:06', 15);
 insert into product(name, type_id, expired_date, price) values ('bitter', 3, '2021-04-08 04:05:06', 8);
 insert into product(name, type_id, expired_date, price) values ('spoiled', 3, '2021-05-08 04:05:06', 3);
@@ -32,13 +32,13 @@ select p.name, p.price
 from product as p 
 inner join type as t on 
 t.id = p.type_id
-where t.id = 1
+where t.name = 'СЫР'
 
 select p.name 
 from product as p 
 inner join type as t on 
 t.id = p.type_id
-where t.name like '%мороженное%'
+where p.name like '%мороженное%'
 
 select p.name 
 from product as p 
@@ -46,7 +46,7 @@ inner join type as t on
 t.id = p.type_id
 where p.expired_date between now() and (now() + '4 weeks'::interval);
 
-select max(p.price) from product as p
+select * from product as p order by p.price DESC limit 1
 
 select t.name, count(t.name)
 from product as p
@@ -62,5 +62,5 @@ select t.name
 from product as p
 inner join type as t on t.id = p.type_id
 group by t.name
-having count(t.name) > 6
+having count(p.name) > 6
 
