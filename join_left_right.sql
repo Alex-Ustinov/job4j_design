@@ -79,4 +79,5 @@ insert into teens(name, gender) values ('susana', 'female');
 insert into teens(name, gender) values ('adam', 'male');
 insert into teens(name, gender) values ('mat', 'male');
 
-select * from teens t1 cross join teens t2;
+select * from teens t1 cross join teens t2
+where t1.gender = 'male' and t2.gender = 'female'
