@@ -1,5 +1,7 @@
 package ru.job4j.jdbc;
 
+import ru.job4j.io.Config;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -17,21 +19,13 @@ public class ConnectionDemo {
 //        String login = "postgres";
 //        String password = "password";
 
-        ArrayList<String> dbSetting = new ArrayList<>();
-        try (BufferedReader in = new BufferedReader(new FileReader("app.properties.txt"))) {
-            for (String line = in.readLine(); line != null; line = in.readLine() ) {
-                String[] dataBD = line.split("=");
-                if (dataBD.length == 2) {
-                    dbSetting.add(dataBD[1].replaceAll("\\s+",""));
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Config config = new Config("app.properties");
+        config.load();
+        String url = config.value("jdbc:postgresql");
+        String login = config.value("login");
+        String password = config.value("password");
 
-        try (Connection connection =
-                     DriverManager.getConnection(
-                             dbSetting.get(0), dbSetting.get(1), dbSetting.get(2))) {
+        try (Connection connection = DriverManager.getConnection(url, login, password)) {
             DatabaseMetaData metaData = connection.getMetaData();
             System.out.println(metaData.getUserName());
             System.out.println(metaData.getURL());
