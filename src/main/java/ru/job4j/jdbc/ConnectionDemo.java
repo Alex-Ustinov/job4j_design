@@ -6,29 +6,48 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class ConnectionDemo {
-    public static void main(String[] args) throws ClassNotFoundException, SQLException, FileNotFoundException {
+
+    private static Connection getConnection() throws Exception {
         Class.forName("org.postgresql.Driver");
-//        String url = "jdbc:postgresql://http://127.0.0.1:5934//cars";
-//        String login = "postgres";
-//        String password = "password";
+//        Config config = new Config("app.properties");
+//        config.load();
+//        String url = config.value("jdbc:postgresql");
+//        String login = config.value("login");
+//        String password = config.value("password");
+        String url = "jdbc:postgresql://localhost:5432/idea_db";
+        String login = "postgres";
+        String password = "password";
+        return DriverManager.getConnection(url, login, password);
+    }
 
-        Config config = new Config("app.properties");
-        config.load();
-        String url = config.value("jdbc:postgresql");
-        String login = config.value("login");
-        String password = config.value("password");
-
-        try (Connection connection = DriverManager.getConnection(url, login, password)) {
-            DatabaseMetaData metaData = connection.getMetaData();
-            System.out.println(metaData.getUserName());
-            System.out.println(metaData.getURL());
+    public static void main(String[] args) throws Exception {
+        try (Connection connection = getConnection()) {
+            try (Statement statement = connection.createStatement()) {
+                String sql = String.format("create table if not exists demo_table(%s, %s);",
+                        "id serial primary key",
+                        "name varchar(255)"
+                );
+                statement.execute(sql);
+                System.out.println(getTableScheme(connection, "demo_table"));
+            }
         }
+    }
+
+    public static String getTableScheme (Connection connection, String tableName) throws Exception {
+        StringBuilder scheme = new StringBuilder();
+        DatabaseMetaData metaData = connection.getMetaData();
+        try (ResultSet columns = metaData.getColumns(null, null, tableName, null)) {
+            scheme.append(String.format("%-15s %-15s%n", "column", "type"));
+            while (columns.next()) {
+                scheme.append(String.format("%-15s %-15s%n",
+                        columns.getString("COLUMN_NAME"),
+                        columns.getString("TYPE_NAME")));
+            }
+        }
+        return scheme.toString();
     }
 }
