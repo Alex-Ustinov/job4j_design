@@ -8,7 +8,7 @@ import java.util.Properties;
 
 public class TableEditor implements AutoCloseable {
 
-    private static Connection connection;
+    private Connection connection;
 
     private Properties properties;
 
@@ -17,8 +17,9 @@ public class TableEditor implements AutoCloseable {
         initConnection();
     }
 
-    public static void createRequest(String sql) throws SQLException {
-        try (Statement statement = connection.createStatement()) {
+    public void createRequest(String sql) throws Exception {
+        TableEditor tableEditor = new TableEditor(properties);
+        try (Statement statement = tableEditor.connection.createStatement()) {
             statement.execute(sql);
         }
     }
@@ -57,7 +58,7 @@ public class TableEditor implements AutoCloseable {
 
     public void renameColumn(String tableName, String columnName, String newColumnName) throws Exception {
         String sql = "alter table "
-                    + tableName + " drop "
+                    + tableName + " rename "
                     + columnName + " to "
                     + newColumnName;
         createRequest(sql);
