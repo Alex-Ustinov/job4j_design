@@ -41,7 +41,7 @@ public class EmailExamTest {
         emailExam.addUser(user3);
         emailExam.addUser(user4);
         emailExam.addUser(user5);
-        Map<String, EmailExam.User> test = emailExam.getContainer();
+        Map<EmailExam.User, EmailExam.User> test = emailExam.getContainer();
         assertThat(test.size(), is(2));
     }
 }

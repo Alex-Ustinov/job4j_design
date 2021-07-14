@@ -20,17 +20,6 @@ public class PrepareStatementDemo {
         connection = DriverManager.getConnection(url, login, password);
     }
 
-    public void insert(City city) {
-        try (PreparedStatement statement =
-                     connection.prepareStatement("insert into cities(name, population) values (?, ?)")) {
-            statement.setString(1, city.getName());
-            statement.setInt(2, city.getPopulation());
-            statement.execute();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     public boolean update(City city) {
         boolean result = false;
         try (PreparedStatement statement =

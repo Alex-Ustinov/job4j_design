@@ -1,42 +1,46 @@
 package ru.job4j.collection;
 
 import java.util.*;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 public class EmailExam {
-    private Map<String, User> container = new HashMap<>();
+    private Map<User, User> container = new HashMap<>();
 
     public List<String> searchExistUser(User user) {
-        Predicate<String> predicate = (el) -> Arrays.stream(el.split(","))
-                .anyMatch(userEmail -> user.emails.contains(userEmail));
-        List<String> existUser = container.keySet()
-                .stream()
-                .filter(predicate)
-                .collect(Collectors.toList());
+        List<String> existUser = new ArrayList<String>();
+        for (Map.Entry<User, User> userInContainer : container.entrySet()) {
+            for (String email : userInContainer.getValue().emails) {
+                User grabUser = userInContainer.getKey();
+                for (String targetUserEmail : user.emails) {
+                    if (email.equals(targetUserEmail)) {
+                        existUser.add(email);
+                        removeExistUser(grabUser);
+                    }
+                }
+            }
+        }
         return existUser;
     }
 
-    public void changeUser(User user, List<String> existUser) {
-        String keyInitialUser = existUser.iterator().next();
-        User initialUser = container.get(keyInitialUser);
-        for (String userEmails : user.emails) {
-            initialUser.addEmail(userEmails);
+    public void removeExistUser(User user) {
+        container.remove(user);
+    }
+
+    public void changeUser(User user, List<String> existUserEmails) {
+        for (String email : existUserEmails) {
+            user.addEmail(email);
         }
-        container.remove(keyInitialUser);
-        container.put(String.join(",", initialUser.emails), initialUser);
     }
 
     public void addUser(User user) {
         List<String> existUser = searchExistUser(user);
-        if (existUser.size() == 1) {
+        if (existUser.size() > 0) {
             changeUser(user, existUser);
             return;
         }
-        container.put(String.join(",", user.emails), user);
+        container.put(user, user);
     }
 
-    public Map<String, User> getContainer() {
+    public Map<User, User> getContainer() {
         return container;
     }
 
