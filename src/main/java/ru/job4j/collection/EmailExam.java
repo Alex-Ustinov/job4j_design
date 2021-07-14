@@ -21,6 +21,7 @@ public class EmailExam {
         return existUser;
     }
 
+
     public void removeExistUser(User user) {
         container.remove(user);
     }
